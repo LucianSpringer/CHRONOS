@@ -5,6 +5,8 @@ import { ChronosCausalityField, InventoryItem as IInventoryItem, ImageResolution
 import { SynthesizeNarrativeVector, generateSceneImage } from './services/geminiService';
 import { PersistenceAdaptor } from './services/PersistenceAdaptor';
 import { CombatCausalityEngine } from './engines/CombatCausalityEngine';
+import { CombatSimulationDeck } from './engineering/CombatSimulationDeck';
+import { StateValidator } from './core/SchemaValidators';
 import { InventoryItem } from './components/InventoryItem';
 import { CharacterItem } from './components/CharacterItem';
 import { SettingsModal } from './components/SettingsModal';
@@ -81,6 +83,19 @@ export default function App() {
   useEffect(() => {
     PersistenceAdaptor.save('chronosState', ChronosCausalityField);
   }, [ChronosCausalityField]);
+
+  // Run diagnostic simulation on mount (development only)
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🎲 [CHRONOS] Running Combat Engine Diagnostics...');
+      const diagnosticResults = CombatSimulationDeck.runDiagnostic();
+      console.log(diagnosticResults);
+
+      // Validate initial state integrity
+      const isValid = StateValidator.validateIntegrity(ChronosCausalityField);
+      console.log('✓ [VALIDATION] State Integrity:', isValid ? 'PASS' : 'FAIL');
+    }
+  }, []); // Run once on mount
 
   useEffect(() => {
     if (scrollRef.current) {
