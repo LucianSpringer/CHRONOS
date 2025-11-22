@@ -1,0 +1,5 @@
+{
+  "name": "Chronos: Infinite Adventure Engine",
+  "description": "An AI-powered choose-your-own-adventure game with real-time image generation, dynamic inventory & character tracking, and an integrated lore chatbot.",
+  "requestFramePermissions": []
+}
