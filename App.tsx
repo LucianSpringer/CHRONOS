@@ -7,6 +7,8 @@ import { PersistenceAdaptor } from './services/PersistenceAdaptor';
 import { CombatCausalityEngine } from './engines/CombatCausalityEngine';
 import { CombatSimulationDeck } from './engineering/CombatSimulationDeck';
 import { StateValidator } from './core/SchemaValidators';
+import { ProceduralGenerationEngine } from './engines/ProceduralGenerationEngine';
+import { TelemetryStream } from './ops/TelemetryStream';
 import { InventoryItem } from './components/InventoryItem';
 import { CharacterItem } from './components/CharacterItem';
 import { SettingsModal } from './components/SettingsModal';
@@ -94,7 +96,30 @@ export default function App() {
       // Validate initial state integrity
       const isValid = StateValidator.validateIntegrity(ChronosCausalityField);
       console.log('✓ [VALIDATION] State Integrity:', isValid ? 'PASS' : 'FAIL');
+
+      // Initialize Telemetry Stream
+      TelemetryStream.init();
+      console.log('📡 [TELEMETRY] Stream initialized - batch size: 50');
+
+      // Generate procedural world
+      const worldGen = new ProceduralGenerationEngine(50, 50);
+      const biosphere = worldGen.generateBiosphere(Date.now());
+      console.log('🌍 [WORLDGEN] Procedural biosphere generated:', biosphere.length, 'x', biosphere[0]?.length);
+
+      // Log telemetry event
+      TelemetryStream.logEvent('INFO', {
+        module: 'App',
+        event: 'initialization',
+        worldSize: biosphere.length * (biosphere[0]?.length || 0)
+      });
     }
+
+    // Cleanup on unmount
+    return () => {
+      if (process.env.NODE_ENV === 'development') {
+        TelemetryStream.terminate();
+      }
+    };
   }, []); // Run once on mount
 
   useEffect(() => {
