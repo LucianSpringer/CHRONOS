@@ -15,46 +15,46 @@ const getApiKey = (): string => {
 // --- SCHEMA DEFINITIONS ---
 
 const statusEffectSchema: Schema = {
-    type: Type.OBJECT,
-    properties: {
-        id: { type: Type.STRING },
-        name: { type: Type.STRING },
-        type: { type: Type.STRING, enum: ['buff', 'debuff'] },
-        description: { type: Type.STRING },
-        duration: { type: Type.INTEGER },
-        icon: { type: Type.STRING, description: "Material Symbol name." },
-        element: { type: Type.STRING, enum: ['fire', 'ice', 'lightning', 'poison', 'physical', 'arcane', 'earth', 'wind', 'holy', 'dark'] }
-    },
-    required: ["id", "name", "type", "description", "duration", "icon"]
+  type: Type.OBJECT,
+  properties: {
+    id: { type: Type.STRING },
+    name: { type: Type.STRING },
+    type: { type: Type.STRING, enum: ['buff', 'debuff'] },
+    description: { type: Type.STRING },
+    duration: { type: Type.INTEGER },
+    icon: { type: Type.STRING, description: "Material Symbol name." },
+    element: { type: Type.STRING, enum: ['fire', 'ice', 'lightning', 'poison', 'physical', 'arcane', 'earth', 'wind', 'holy', 'dark'] }
+  },
+  required: ["id", "name", "type", "description", "duration", "icon"]
 };
 
 const itemEffectSchema: Schema = {
-    type: Type.OBJECT,
-    properties: {
-        type: { type: Type.STRING, enum: ['heal_hp', 'heal_mana', 'buff', 'cure_status', 'damage', 'learn_spell'] },
-        value: { type: Type.INTEGER },
-        statusEffect: statusEffectSchema,
-        targetAttribute: { type: Type.STRING },
-        element: { type: Type.STRING, enum: ['fire', 'ice', 'lightning', 'poison', 'physical', 'arcane', 'earth', 'wind', 'holy', 'dark'] },
-        spellName: { type: Type.STRING, description: "Only for learn_spell type" }
-    },
-    required: ["type"]
+  type: Type.OBJECT,
+  properties: {
+    type: { type: Type.STRING, enum: ['heal_hp', 'heal_mana', 'buff', 'cure_status', 'damage', 'learn_spell'] },
+    value: { type: Type.INTEGER },
+    statusEffect: statusEffectSchema,
+    targetAttribute: { type: Type.STRING },
+    element: { type: Type.STRING, enum: ['fire', 'ice', 'lightning', 'poison', 'physical', 'arcane', 'earth', 'wind', 'holy', 'dark'] },
+    spellName: { type: Type.STRING, description: "Only for learn_spell type" }
+  },
+  required: ["type"]
 };
 
 const inventoryItemSchema: Schema = {
-    type: Type.OBJECT,
-    properties: {
-        name: { type: Type.STRING },
-        description: { type: Type.STRING },
-        consumable: { type: Type.BOOLEAN },
-        effects: { type: Type.ARRAY, items: itemEffectSchema },
-        icon: { type: Type.STRING, description: "Material Symbol name matching the item" },
-        maxDurability: { type: Type.INTEGER },
-        currentDurability: { type: Type.INTEGER },
-        rarity: { type: Type.STRING, enum: ['common', 'uncommon', 'rare', 'epic', 'legendary'] },
-        itemType: { type: Type.STRING, enum: ['weapon', 'armor', 'consumable', 'material', 'key', 'tome'] }
-    },
-    required: ["name", "description", "consumable", "icon", "effects"]
+  type: Type.OBJECT,
+  properties: {
+    name: { type: Type.STRING },
+    description: { type: Type.STRING },
+    consumable: { type: Type.BOOLEAN },
+    effects: { type: Type.ARRAY, items: itemEffectSchema },
+    icon: { type: Type.STRING, description: "Material Symbol name matching the item" },
+    maxDurability: { type: Type.INTEGER },
+    currentDurability: { type: Type.INTEGER },
+    rarity: { type: Type.STRING, enum: ['common', 'uncommon', 'rare', 'epic', 'legendary'] },
+    itemType: { type: Type.STRING, enum: ['weapon', 'armor', 'consumable', 'material', 'key', 'tome'] }
+  },
+  required: ["name", "description", "consumable", "icon", "effects"]
 };
 
 const storyTurnSchema: Schema = {
@@ -73,16 +73,16 @@ const storyTurnSchema: Schema = {
       properties: {
         add: { type: Type.ARRAY, items: inventoryItemSchema },
         remove: { type: Type.ARRAY, items: { type: Type.STRING } },
-        update: { 
-            type: Type.ARRAY, 
-            items: { 
-                type: Type.OBJECT, 
-                properties: { 
-                    name: { type: Type.STRING }, 
-                    newDurability: { type: Type.INTEGER }
-                },
-                required: ["name", "newDurability"]
-            }
+        update: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              name: { type: Type.STRING },
+              newDurability: { type: Type.INTEGER }
+            },
+            required: ["name", "newDurability"]
+          }
         }
       },
     },
@@ -114,25 +114,25 @@ const storyTurnSchema: Schema = {
       description: "Choices for the player.",
     },
     playerAppearanceUpdate: { type: Type.STRING },
-    
+
     // RPG Mechanics
     statUpdates: {
-        type: Type.OBJECT,
-        properties: {
-            hpChange: { type: Type.INTEGER },
-            manaChange: { type: Type.INTEGER }
-        }
+      type: Type.OBJECT,
+      properties: {
+        hpChange: { type: Type.INTEGER },
+        manaChange: { type: Type.INTEGER }
+      }
     },
     spellCooldownUpdates: {
-        type: Type.ARRAY,
-        items: {
-            type: Type.OBJECT,
-            properties: {
-                spellName: { type: Type.STRING },
-                cooldown: { type: Type.INTEGER, description: "Number of turns to wait." }
-            },
-            required: ["spellName", "cooldown"]
-        }
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          spellName: { type: Type.STRING },
+          cooldown: { type: Type.INTEGER, description: "Number of turns to wait." }
+        },
+        required: ["spellName", "cooldown"]
+      }
     },
     combatEncounter: {
       type: Type.OBJECT,
@@ -153,46 +153,46 @@ const storyTurnSchema: Schema = {
       properties: {
         isCombatOver: { type: Type.BOOLEAN },
         logs: {
-            type: Type.ARRAY,
-            description: "Detailed chronological events.",
-            items: {
-                type: Type.OBJECT,
-                properties: {
-                    text: { type: Type.STRING },
-                    type: { type: Type.STRING, enum: ['damage', 'heal', 'miss', 'spell', 'info', 'enemy_move', 'effect', 'ability', 'item'] },
-                    value: { type: Type.INTEGER },
-                    source: { type: Type.STRING, enum: ['player', 'enemy', 'system'] },
-                    isCritical: { type: Type.BOOLEAN },
-                    element: { type: Type.STRING }
-                },
-                required: ['text', 'type', 'source']
-            }
-        },
-        statusUpdates: {
+          type: Type.ARRAY,
+          description: "Detailed chronological events.",
+          items: {
             type: Type.OBJECT,
             properties: {
-                player: {
-                    type: Type.OBJECT,
-                    properties: {
-                        add: { type: Type.ARRAY, items: statusEffectSchema },
-                        remove: { type: Type.ARRAY, items: { type: Type.STRING } }
-                    }
-                },
-                enemy: {
-                    type: Type.OBJECT,
-                    properties: {
-                        add: { type: Type.ARRAY, items: statusEffectSchema },
-                        remove: { type: Type.ARRAY, items: { type: Type.STRING } }
-                    }
-                }
+              text: { type: Type.STRING },
+              type: { type: Type.STRING, enum: ['damage', 'heal', 'miss', 'spell', 'info', 'enemy_move', 'effect', 'ability', 'item'] },
+              value: { type: Type.INTEGER },
+              source: { type: Type.STRING, enum: ['player', 'enemy', 'system'] },
+              isCritical: { type: Type.BOOLEAN },
+              element: { type: Type.STRING }
+            },
+            required: ['text', 'type', 'source']
+          }
+        },
+        statusUpdates: {
+          type: Type.OBJECT,
+          properties: {
+            player: {
+              type: Type.OBJECT,
+              properties: {
+                add: { type: Type.ARRAY, items: statusEffectSchema },
+                remove: { type: Type.ARRAY, items: { type: Type.STRING } }
+              }
+            },
+            enemy: {
+              type: Type.OBJECT,
+              properties: {
+                add: { type: Type.ARRAY, items: statusEffectSchema },
+                remove: { type: Type.ARRAY, items: { type: Type.STRING } }
+              }
             }
+          }
         }
       },
     },
     lootDropped: {
-        type: Type.ARRAY,
-        items: inventoryItemSchema,
-        description: "List of items dropped."
+      type: Type.ARRAY,
+      items: inventoryItemSchema,
+      description: "List of items dropped."
     },
     newSpells: {
       type: Type.ARRAY,
@@ -205,7 +205,7 @@ const storyTurnSchema: Schema = {
 
 // --- SERVICE METHODS ---
 
-export const generateStoryTurn = async (
+export const SynthesizeNarrativeVector = async (
   history: { role: 'user' | 'model'; parts: { text: string }[] }[],
   userAction: string,
   currentInventory: { name: string; durability?: number }[],
@@ -230,17 +230,22 @@ export const generateStoryTurn = async (
        - PLAYER STATS: STR:${stats.str}, DEX:${stats.dex}, INT:${stats.int}, MANA:${stats.mana}/${stats.maxMana}.
        - SPELL COOLDOWNS: ${JSON.stringify(spellCooldowns)} (Do NOT allow casting if > 0).
        - ENEMY RESISTANCES: ${JSON.stringify(combatEnemy.resistances || [])}.
-       - ENEMY WEAKNESSES: ${JSON.stringify(combatEnemy.weaknesses || [])}.
-       - CRITICAL HITS: Calc chance based on DEX. If (DEX * 2) > Random(0-100), trigger CRITICAL (2x Dmg). Mark 'isCritical': true.
-       - ITEM DURABILITY: Decrease durability of used weapons/armor by 1-2 points. Use 'inventoryUpdates.update'. If 0, item breaks (cannot use).
-       - SPELL COMBOS & ELEMENTS: Apply elemental multipliers (Fire > Ice = 2x, etc.).`
+       - ENEMY WEAKNESSES: ${JSON.stringify(combatEnemy.weaknesses || [])}. 
+       
+       🚨 CRITICAL: DO NOT CALCULATE DAMAGE OR HP CHANGES. The client handles all math.
+       - Describe what happens narratively (e.g., "Your blade strikes true!", "The spell fizzles!")
+       - Indicate attack success/failure, critical hits, elemental reactions in combatRound.logs
+       - Use 'isCritical' flag, element type, and descriptive text only
+       - Client will calculate actual damage based on stats, resistances, and formulas`
     : `Exploration Mode. 
-       - DURABILITY: Using tools/weapons to pry/break things reduces durability.
-       - COOLDOWNS: Spells cast here also trigger cooldowns (usually 1-3 turns).
-       - CRAFTING/REPAIR: If user tries to repair and has kit/resources, restore durability via 'inventoryUpdates.update'.`;
+       - DURABILITY: Mention if tools/weapons are used heavily (client reduces durability).
+       - COOLDOWNS: Spells cast here also trigger cooldowns (client manages turn counts).
+       - CRAFTING/REPAIR: Describe repair outcomes narratively (client updates durability values).
+       
+       🚨 DO NOT CALCULATE HP/MANA/INVENTORY MATH. Client handles all calculations.`;
 
   const systemInstruction = `
-    You are the Game Master (Gemini 3 Pro).
+    You are the Game Master (Gemini 3 Pro) for an infinite adventure RPG.
     
     Current State:
     - Quest: ${currentQuest}
@@ -252,20 +257,31 @@ export const generateStoryTurn = async (
 
     ${combatContext}
 
+    🎯 PRIMARY DIRECTIVE - NARRATIVE ONLY, ZERO MATH:
+    ═══════════════════════════════════════════════════════
+    YOU ARE THE STORYTELLER. You describe what happens.
+    The CLIENT CALCULATES all numbers (damage, HP, mana, inventory changes).
+    
+    ❌ NEVER include in your response:
+       - "hpChange": -5
+       - "manaChange": -10
+       - Damage calculations or healing amounts
+       - Durability reduction amounts
+    
+    ✅ ALWAYS describe events narratively:
+       - "Your fireball engulfs the enemy in flames!" (client calculates fire damage)
+       - "The enemy's claw rakes across your armor!" (client calculates physical damage)
+       - "Your health potion glows as you drink it" (client applies healing)
+       - "Your sword strikes the stone wall repeatedly" (client reduces durability)
+
     General Rules:
-    1. Narrative: High-quality, emergent storytelling. Describe critical strikes and elemental effects vividly.
-    2. Mechanics: 
-       - Enforce Spell Cooldowns: Return 'spellCooldownUpdates' (e.g., Fireball: 3 turns) when cast.
-       - Manage Durability: Non-consumable items have durability.
-       - Elemental Rock-Paper-Scissors: Fire melts Ice, Water conducts Lightning, Earth resists Lightning, etc.
-    3. Environmental Interaction:
-       - If user uses a spell/item on the environment (e.g. "Burn the vines"), resolve it.
-       - Grant buffs/debuffs for environmental hazards (e.g., "Standing in Poison Swamp" -> Add Poison Debuff).
-    4. Spell Discovery:
-       - Spells should primarily be learned via Items (Tomes/Scrolls) or NPCs. 
-       - If a user reads a tome, use the 'itemEffect' of type 'learn_spell'.
-       - Generate 'Tome of [Spell]' as loot with 'itemType': 'tome' and effect 'learn_spell'.
-    5. JSON Only: Output must strictly follow the schema.
+    1. Narrative Excellence: High-quality, emergent storytelling. Describe critical strikes, elemental effects, broken gear VIVIDLY.
+    2. Combat Logs: In combatRound.logs, describe each action. Use 'isCritical', 'element', 'type' fields but NO 'value' field.
+    3. Spell Cooldowns: Return 'spellCooldownUpdates' when spells are cast (e.g., Fireball: 3 turns).
+    4. Durability: Mention when weapons/armor take damage in narrative. Client handles the numbers.
+    5. Environmental Interaction: Describe environmental effects. Client applies debuffs/buffs.
+    6. Spell Discovery: Primarily via Tomes (itemType: 'tome', effect: 'learn_spell') or NPC teaching.
+    7. JSON Strict: Output must follow schema exactly.
   `;
 
   try {
@@ -279,7 +295,7 @@ export const generateStoryTurn = async (
         systemInstruction: systemInstruction,
         responseMimeType: "application/json",
         responseSchema: storyTurnSchema,
-        thinkingConfig: { thinkingBudget: 4096 },
+        thinkingConfig: { thinkingBudget: 1024 }, // Enable thinking mode
       },
     });
 
@@ -293,6 +309,10 @@ export const generateStoryTurn = async (
   }
 };
 
+// Legacy export for backward compatibility
+export const generateStoryTurn = SynthesizeNarrativeVector;
+
+
 export const generateSceneImage = async (
   visualDescription: string,
   resolution: ImageResolution,
@@ -302,7 +322,7 @@ export const generateSceneImage = async (
   const ai = new GoogleGenAI({ apiKey: getApiKey() });
   const subjectStr = playerDescription ? `Subject: ${playerDescription}. ` : "";
   const fullPrompt = `${subjectStr}${visualDescription}. Art Style: ${artStyle}. Cinematic, detailed, atmospheric.`;
-  
+
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-image-preview',
@@ -341,22 +361,22 @@ export const quickItemExamine = async (itemName: string): Promise<string> => {
 };
 
 export const chatWithLoreKeeper = async (
-    history: { role: 'user' | 'model'; parts: { text: string }[] }[],
-    userQuestion: string,
-    currentContext: string
+  history: { role: 'user' | 'model'; parts: { text: string }[] }[],
+  userQuestion: string,
+  currentContext: string
 ): Promise<string> => {
-    const ai = new GoogleGenAI({ apiKey: getApiKey() });
-    try {
-        const response = await ai.models.generateContent({
-            model: 'gemini-3-pro-preview',
-            contents: [
-                ...history,
-                { role: 'user', parts: [{ text: `Question: ${userQuestion}` }] }
-            ],
-            config: {
-                systemInstruction: `You are the Lore Keeper. Context: ${currentContext}. Answer efficiently based on history.`,
-            }
-        });
-        return response.text || "...";
-    } catch (error) { return "Silence."; }
+  const ai = new GoogleGenAI({ apiKey: getApiKey() });
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: [
+        ...history,
+        { role: 'user', parts: [{ text: `Question: ${userQuestion}` }] }
+      ],
+      config: {
+        systemInstruction: `You are the Lore Keeper. Context: ${currentContext}. Answer efficiently based on history.`,
+      }
+    });
+    return response.text || "...";
+  } catch (error) { return "Silence."; }
 }
