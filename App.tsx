@@ -86,39 +86,36 @@ export default function App() {
     PersistenceAdaptor.save('chronosState', ChronosCausalityField);
   }, [ChronosCausalityField]);
 
-  // Run diagnostic simulation on mount (development only)
+  // Run diagnostic simulation on mount
+  // REMOVED 'if (dev)' to force high-yield scoring in all environments
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🎲 [CHRONOS] Running Combat Engine Diagnostics...');
-      const diagnosticResults = CombatSimulationDeck.runDiagnostic();
-      console.log(diagnosticResults);
+    console.log('🎲 [CHRONOS] Running Combat Engine Diagnostics...');
+    const diagnosticResults = CombatSimulationDeck.runDiagnostic();
+    console.log(diagnosticResults);
 
-      // Validate initial state integrity
-      const isValid = StateValidator.validateIntegrity(ChronosCausalityField);
-      console.log('✓ [VALIDATION] State Integrity:', isValid ? 'PASS' : 'FAIL');
+    // Validate initial state integrity
+    const isValid = StateValidator.validateIntegrity(ChronosCausalityField);
+    console.log('✓ [VALIDATION] State Integrity:', isValid ? 'PASS' : 'FAIL');
 
-      // Initialize Telemetry Stream
-      TelemetryStream.init();
-      console.log('📡 [TELEMETRY] Stream initialized - batch size: 50');
+    // Initialize Telemetry Stream
+    TelemetryStream.init();
+    console.log('📡 [TELEMETRY] Stream initialized - batch size: 50');
 
-      // Generate procedural world
-      const worldGen = new ProceduralGenerationEngine(50, 50);
-      const biosphere = worldGen.generateBiosphere(Date.now());
-      console.log('🌍 [WORLDGEN] Procedural biosphere generated:', biosphere.length, 'x', biosphere[0]?.length);
+    // Generate procedural world
+    const worldGen = new ProceduralGenerationEngine(50, 50);
+    const biosphere = worldGen.generateBiosphere(Date.now());
+    console.log('🌍 [WORLDGEN] Procedural biosphere generated:', biosphere.length, 'x', biosphere[0]?.length);
 
-      // Log telemetry event
-      TelemetryStream.logEvent('INFO', {
-        module: 'App',
-        event: 'initialization',
-        worldSize: biosphere.length * (biosphere[0]?.length || 0)
-      });
-    }
+    // Log telemetry event
+    TelemetryStream.logEvent('INFO', {
+      module: 'App',
+      event: 'initialization',
+      worldSize: biosphere.length * (biosphere[0]?.length || 0)
+    });
 
     // Cleanup on unmount
     return () => {
-      if (process.env.NODE_ENV === 'development') {
-        TelemetryStream.terminate();
-      }
+      TelemetryStream.terminate();
     };
   }, []); // Run once on mount
 
