@@ -73,10 +73,10 @@ export interface CombatLogEntry {
   element?: ElementType;
 }
 
-export interface GameState {
+export interface ChronosCausalityField {
   currentNarrative: string;
   history: { role: 'user' | 'model'; parts: { text: string }[] }[];
-  inventory: InventoryItem[];
+  artifactRetentionMatrix: InventoryItem[];
   knownCharacters: Character[];
   currentQuest: string;
   sceneImageUrl: string | null;
@@ -85,7 +85,7 @@ export interface GameState {
   isLoading: boolean;
   imageLoading: boolean;
   turnCount: number;
-  
+
   // RPG Stats
   playerHp: number;
   playerMaxHp: number;
@@ -94,18 +94,22 @@ export interface GameState {
   spellCooldowns: Record<string, number>; // Spell Name -> Turns remaining
   playerActiveEffects: StatusEffect[];
   spellHistory: string[]; // Track recent spells for combos
-  
+
   // Combat State
   inCombat: boolean;
   combatEnemy: Character | null;
   combatLog: CombatLogEntry[];
   combatTutorialSeen: boolean;
   isTutorialActive: boolean;
-  
+
   // Visual Triggers
   lastSpellCast: string | null; // Triggers animation
   screenShake: boolean; // Triggers damage shake
 }
+
+// Type alias for backward compatibility
+export type GameState = ChronosCausalityField;
+
 
 // Helper interface for the AI response which might return fuller item details now
 export interface AIItemStub {
@@ -124,7 +128,7 @@ export interface StoryTurnResponse {
   narrative: string;
   visualDescription: string;
   inventoryUpdates: {
-    add?: AIItemStub[]; 
+    add?: AIItemStub[];
     remove?: string[];
     update?: { name: string; newDurability: number }[]; // For durability changes
   };
@@ -135,15 +139,15 @@ export interface StoryTurnResponse {
   questUpdate?: string;
   suggestedActions: string[];
   playerAppearanceUpdate?: string;
-  
+
   // RPG Mechanics
   statUpdates?: {
     hpChange?: number;
     manaChange?: number;
   };
-  
+
   spellCooldownUpdates?: { spellName: string; cooldown: number }[]; // Sets cooldowns
-  
+
   combatEncounter?: {
     enemyName: string;
     enemyDescription: string;
@@ -152,19 +156,19 @@ export interface StoryTurnResponse {
     resistances?: ElementType[];
     weaknesses?: ElementType[];
   };
-  
+
   combatRound?: {
     isCombatOver: boolean;
     logs: CombatLogEntry[];
     statusUpdates?: {
-        player?: {
-            add?: StatusEffect[];
-            remove?: string[]; // remove by name
-        };
-        enemy?: {
-            add?: StatusEffect[];
-            remove?: string[];
-        };
+      player?: {
+        add?: StatusEffect[];
+        remove?: string[]; // remove by name
+      };
+      enemy?: {
+        add?: StatusEffect[];
+        remove?: string[];
+      };
     };
   };
 
